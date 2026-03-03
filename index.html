@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="DE Downloads.lk - Fastest tool to download your favorite videos from YouTube, TikTok, and Facebook.">
+    <title>DE Downloads</title>
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="logo.png">
+    <!-- Google Fonts for Modern Typography -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <!-- Deep Nature Background -->
+    <div class="nature-bg"></div>
+
+    <!-- Main Glass Overlay Board -->
+    <div class="glass-board">
+        <header class="top-nav">
+            <div class="logo-area">
+                <img src="logo.png" alt="DE Downloads.lk Logo" class="logo"
+                    onerror="this.src='https://via.placeholder.com/40?text=DE';">
+                <h2>DOWNLOADS</h2>
+            </div>
+            <nav class="nav-links desktop-only">
+                <a href="https://dilnuka13.github.io/my/" target="_blank" class="dev-link">
+                    DEVELOPER
+                    <img src="https://dilnuka13.github.io/my/titlebar.png" alt="Dev Logo" class="dev-logo">
+                </a>
+            </nav>
+        </header>
+
+        <main class="content-split">
+            <div class="left-content">
+                <p class="subtitle">DOWNLOAD THE</p>
+                <div class="massive-text-group">
+                    <h1 class="massive-text">VIDEO</h1>
+                </div>
+                <p class="description-text">AT DE DOWNLOADS, WE ARE COMMITTED TO PROVIDING THE FASTEST AND HIGHEST
+                    QUALITY VIDEO DOWNLOADS. OUR MISSION IS TO ENABLE YOU TO SAVE YOUR FAVORITE CONTENT FROM YOUTUBE,
+                    TIKTOK, AND FACEBOOK WITH EASE AND RELIABILITY.</p>
+            </div>
+
+            <div class="right-content">
+                <div class="download-section">
+                    <ul class="platform-tabs" id="platformTabs">
+                        <li class="active" data-platform="youtube">YouTube</li>
+                        <li data-platform="tiktok">TikTok</li>
+                        <li data-platform="facebook">Facebook</li>
+                    </ul>
+                    <div class="input-wrapper">
+                        <div class="input-group">
+                            <input type="url" id="videoUrl" placeholder="Paste YouTube link here..." required
+                                aria-label="Video URL">
+                            <button id="clearBtn" class="clear-btn" aria-label="Clear URL"
+                                style="display: none;">X</button>
+                            <button id="pasteBtn" class="paste-btn" aria-label="Paste URL">Paste</button>
+                        </div>
+                        <button id="downloadBtn" class="primary-btn" aria-label="Get Video Info">
+                            <span class="btn-text">GET STARTED</span>
+                            <span class="spinner hidden"></span>
+                        </button>
+                    </div>
+                </div>
+
+                <div id="errorContainer" class="message error hidden" role="alert"></div>
+
+                <div id="resultContainer" class="result-card hidden">
+                    <h3 id="videoTitle">Video Title</h3>
+                    <a id="downloadLink" href="#" target="_blank" class="download-now-btn" rel="noopener noreferrer">
+                        Download Video Now
+                    </a>
+                    <p class="helper-text">If clicking the button plays the video instead of downloading, try
+                        Right-Click &amp; "Save Link As..."</p>
+                </div>
+            </div>
+        </main>
+
+        <div class="mobile-dev-footer mobile-only">
+            <a href="https://dilnuka13.github.io/my/" target="_blank" class="dev-link">
+                DEVELOPER
+                <img src="https://dilnuka13.github.io/my/titlebar.png" alt="Dev Logo" class="dev-logo">
+            </a>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
