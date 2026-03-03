@@ -66,14 +66,14 @@ document.addEventListener('DOMContentLoaded', () => {
         resultContainer.classList.add('hidden');
         setLoadingState(true);
 
-        // ඔයාගේ Backend එක Localhost එකේ දුවනවා නම් මෙහෙම දාන්න:
-        const API_BASE_URL = 'http://localhost:5000';
+        // GitHub Pages වගේ තැනක Host කරාම Localhost වැඩ කරන්නේ නෑ. 
+        // ඒ නිසා ඔයාගේ Backend එක (app.py) Render.com වගේ cloud එකක deploy කරලා ලැබෙන URL එක මෙතන දාන්න.
+        const PRODUCTION_API_URL = 'https://ඔයාගේ-backend-url-එක.render.com';
 
-        // ඔයාගේ Backend එක Render.com වගේ තැනක Deploy කරාට පස්සේ ඒ URL එක මෙතනට දාන්න:
-        // const API_BASE_URL = 'https://ඔයාගේ-backend-url-එක.render.com';
-
-        // දැනට පරණ විදිහටම තියෙනවා (ඔයාට ඕනේ URL එක උඩින් දීලා මේක වෙනස් කරන්න)
-        // const API_BASE_URL = '';
+        // ඔයා මේක තමන්ගේ පරිගණකයේ (Localhost) run කරනවා නම්, මේක ඇවිත් 'http://localhost:5000' වෙනවා.
+        // GitHub එකේ ලයිව් තියෙනවා නම් උඩ තියෙන PRODUCTION_API_URL එක ගන්නවා.
+        const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.protocol === 'file:';
+        const API_BASE_URL = isLocalhost ? 'http://localhost:5000' : PRODUCTION_API_URL;
 
         try {
             const response = await fetch(`${API_BASE_URL}/api/download`, {
