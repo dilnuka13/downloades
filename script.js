@@ -83,8 +83,17 @@ document.addEventListener('DOMContentLoaded', () => {
         resultContainer.classList.add('hidden');
         setLoadingState(true);
 
+        // ඔයාගේ Backend එක Localhost එකේ දුවනවා නම් මෙහෙම දාන්න:
+        const API_BASE_URL = 'http://localhost:5000';
+
+        // ඔයාගේ Backend එක Render.com වගේ තැනක Deploy කරාට පස්සේ ඒ URL එක මෙතනට දාන්න:
+        // const API_BASE_URL = 'https://ඔයාගේ-backend-url-එක.render.com';
+
+        // දැනට පරණ විදිහටම තියෙනවා (ඔයාට ඕනේ URL එක උඩින් දීලා මේක වෙනස් කරන්න)
+        // const API_BASE_URL = '';
+
         try {
-            const response = await fetch('/api/download', {
+            const response = await fetch(`${API_BASE_URL}/api/download`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
