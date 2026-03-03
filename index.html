@@ -5,12 +5,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description"
-        content="DE Downloads.lk - Fastest tool to download your favorite videos from YouTube, TikTok, and Facebook.">
-    <title>DE Downloads</title>
+        content="DE Downloads.lk - Fastest tool to download your favorite videos from YouTube, TikTok, and Facebook. Download high-quality videos and audio formats easily.">
+    <meta name="keywords"
+        content="video downloader, youtube downloader, tiktok downloader, facebook downloader, instagram downloader, mp4 downloader, mp3 downloader">
+    <meta name="author" content="DE Downloads">
+    <!-- Open Graph for Social Sharing -->
+    <meta property="og:title" content="DE Downloads - High-Quality Video Downloader">
+    <meta property="og:description"
+        content="Fastest tool to download your favorite videos from YouTube, TikTok, and Facebook.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://dedownloads.lk">
+
+    <title>DE Downloads - Free Video & Audio Downloader</title>
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="logo.png">
     <!-- Google Fonts for Modern Typography -->
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
 </head>
 
@@ -42,19 +54,30 @@
                 </div>
                 <p class="description-text">AT DE DOWNLOADS, WE ARE COMMITTED TO PROVIDING THE FASTEST AND HIGHEST
                     QUALITY VIDEO DOWNLOADS. OUR MISSION IS TO ENABLE YOU TO SAVE YOUR FAVORITE CONTENT FROM YOUTUBE,
-                    TIKTOK, AND FACEBOOK WITH EASE AND RELIABILITY.</p>
+                    TIKTOK, FACEBOOK AND INSTAGRAM WITH EASE AND RELIABILITY.</p>
+                <div class="supported-platforms">
+                    <ul class="platform-list">
+                        <li><a href="https://www.youtube.com" target="_blank" rel="noopener noreferrer"
+                                style="color: inherit; text-decoration: none; display: flex; align-items: center; gap: 10px;"><i
+                                    class="fa-brands fa-youtube" style="color: #ff0000;"></i> YouTube</a></li>
+                        <li><a href="https://www.tiktok.com" target="_blank" rel="noopener noreferrer"
+                                style="color: inherit; text-decoration: none; display: flex; align-items: center; gap: 10px;"><i
+                                    class="fa-brands fa-tiktok" style="color: #ffffff;"></i> TikTok</a></li>
+                        <li><a href="https://www.facebook.com" target="_blank" rel="noopener noreferrer"
+                                style="color: inherit; text-decoration: none; display: flex; align-items: center; gap: 10px;"><i
+                                    class="fa-brands fa-facebook" style="color: #1877f2;"></i> Facebook</a></li>
+                        <li><a href="https://www.instagram.com" target="_blank" rel="noopener noreferrer"
+                                style="color: inherit; text-decoration: none; display: flex; align-items: center; gap: 10px;"><i
+                                    class="fa-brands fa-instagram" style="color: #e1306c;"></i> Instagram</a></li>
+                    </ul>
+                </div>
             </div>
 
             <div class="right-content">
                 <div class="download-section">
-                    <ul class="platform-tabs" id="platformTabs">
-                        <li class="active" data-platform="youtube">YouTube</li>
-                        <li data-platform="tiktok">TikTok</li>
-                        <li data-platform="facebook">Facebook</li>
-                    </ul>
                     <div class="input-wrapper">
                         <div class="input-group">
-                            <input type="url" id="videoUrl" placeholder="Paste YouTube link here..." required
+                            <input type="url" id="videoUrl" placeholder="Paste video link here..." required
                                 aria-label="Video URL">
                             <button id="clearBtn" class="clear-btn" aria-label="Clear URL"
                                 style="display: none;">X</button>
@@ -70,15 +93,65 @@
                 <div id="errorContainer" class="message error hidden" role="alert"></div>
 
                 <div id="resultContainer" class="result-card hidden">
+                    <div id="sourceBadge" class="source-badge hidden">
+                        <i id="sourceIcon" class="fa-solid fa-link"></i>
+                        <span id="sourceText">Source</span>
+                    </div>
+                    <img id="videoThumbnail" src="" alt="Video Thumbnail" class="video-thumbnail hidden">
                     <h3 id="videoTitle">Video Title</h3>
+
+                    <div class="format-selection" id="formatSelectionArea" style="margin-bottom: 1.5rem;">
+                        <div style="display: flex; gap: 1rem; margin-bottom: 1rem;">
+                            <div style="flex: 1;">
+                                <label for="mediaTypeSelect" class="helper-text"
+                                    style="display:block; margin-bottom: 0.5rem; margin-top:0;">Type:</label>
+                                <select id="mediaTypeSelect" class="format-select">
+                                    <option value="Combined">Video + Audio</option>
+                                    <option value="Video Only">Video Only (Mute)</option>
+                                    <option value="Audio Only">Audio Only</option>
+                                </select>
+                            </div>
+                            <div style="flex: 2;">
+                                <label for="formatSelect" class="helper-text"
+                                    style="display:block; margin-bottom: 0.5rem; margin-top:0;">Quality &
+                                    Format:</label>
+                                <select id="formatSelect" class="format-select">
+                                    <!-- Options will be populated here based on type -->
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
                     <a id="downloadLink" href="#" target="_blank" class="download-now-btn" rel="noopener noreferrer">
-                        Download Video Now
+                        Download Now
                     </a>
                     <p class="helper-text">If clicking the button plays the video instead of downloading, try
                         Right-Click &amp; "Save Link As..."</p>
                 </div>
             </div>
         </main>
+
+        <!-- Download Guide Section -->
+        <section class="download-guide">
+            <h2 class="guide-title"><i class="fa-solid fa-circle-info"></i> How to Download</h2>
+            <div class="steps-container">
+                <div class="step-card">
+                    <div class="step-icon"><i class="fa-regular fa-copy"></i></div>
+                    <h3>1. Copy Link</h3>
+                    <p>Find the video you want on YouTube, TikTok, Facebook, or Instagram and copy its link.</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-icon"><i class="fa-solid fa-paste"></i></div>
+                    <h3>2. Paste URL</h3>
+                    <p>Select the correct platform tab above and paste the link into the input field.</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-icon"><i class="fa-solid fa-cloud-arrow-down"></i></div>
+                    <h3>3. Download</h3>
+                    <p>Click the "GET STARTED" button and then hit "Download Video Now" to save.</p>
+                </div>
+            </div>
+        </section>
 
         <div class="mobile-dev-footer mobile-only">
             <a href="https://dilnuka13.github.io/my/" target="_blank" class="dev-link">

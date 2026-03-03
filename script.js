@@ -9,7 +9,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const spinner = document.querySelector('.spinner');
     const pasteBtn = document.getElementById('pasteBtn');
     const clearBtn = document.getElementById('clearBtn');
-    const tabs = document.querySelectorAll('.platform-tabs li');
 
     // Handle Input Changes to show/hide Clear Button
     videoUrlInput.addEventListener('input', () => {
@@ -25,22 +24,6 @@ document.addEventListener('DOMContentLoaded', () => {
         videoUrlInput.value = '';
         clearBtn.style.display = 'none';
         videoUrlInput.focus();
-    });
-
-    // Attach click listeners for tabs
-    tabs.forEach(tab => {
-        tab.addEventListener('click', () => {
-            // Remove active class from all
-            tabs.forEach(t => t.classList.remove('active'));
-            // Add active to clicked
-            tab.classList.add('active');
-
-            // Change placeholder based on platform
-            const platform = tab.getAttribute('data-platform');
-            if (platform === 'youtube') videoUrlInput.placeholder = "Paste YouTube link here...";
-            if (platform === 'tiktok') videoUrlInput.placeholder = "Paste TikTok link here...";
-            if (platform === 'facebook') videoUrlInput.placeholder = "Paste Facebook link here...";
-        });
     });
 
     // Paste button functionality
@@ -117,11 +100,130 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Success: Update UI with result
             videoTitleStr.textContent = data.title || "Unknown Title";
-            downloadLink.href = data.download_url;
 
-            // Depending on cross-origin settings of the resource, the 'download' attribute 
-            // might not work, but we keep it just in case. The helper-text in HTML informs the user.
-            downloadLink.setAttribute('download', 'video.mp4');
+            const sourceBadge = document.getElementById('sourceBadge');
+            const sourceIcon = document.getElementById('sourceIcon');
+            const sourceText = document.getElementById('sourceText');
+
+            if (data.source) {
+                let iconClass = 'fa-solid fa-link';
+                let sourceName = data.source;
+                let sourceColor = '#ffffff';
+
+                if (data.source.toLowerCase().includes('youtube')) {
+                    iconClass = 'fa-brands fa-youtube';
+                    sourceName = 'YouTube';
+                    sourceColor = '#ff0000';
+                } else if (data.source.toLowerCase().includes('tiktok')) {
+                    iconClass = 'fa-brands fa-tiktok';
+                    sourceName = 'TikTok';
+                    sourceColor = '#ffffff';
+                } else if (data.source.toLowerCase().includes('facebook')) {
+                    iconClass = 'fa-brands fa-facebook';
+                    sourceName = 'Facebook';
+                    sourceColor = '#1877f2';
+                } else if (data.source.toLowerCase().includes('instagram')) {
+                    iconClass = 'fa-brands fa-instagram';
+                    sourceName = 'Instagram';
+                    sourceColor = '#e1306c';
+                }
+
+                sourceIcon.className = iconClass;
+                sourceIcon.style.color = sourceColor;
+                sourceText.textContent = sourceName;
+                sourceBadge.classList.remove('hidden');
+            } else {
+                sourceBadge.classList.add('hidden');
+            }
+
+            const videoThumbnail = document.getElementById('videoThumbnail');
+            if (data.thumbnail) {
+                videoThumbnail.src = data.thumbnail;
+                videoThumbnail.classList.remove('hidden');
+            } else {
+                videoThumbnail.classList.add('hidden');
+            }
+
+            const formatSelect = document.getElementById('formatSelect');
+            const mediaTypeSelect = document.getElementById('mediaTypeSelect');
+            formatSelect.innerHTML = ''; // clear old options
+
+            if (data.formats && data.formats.length > 0) {
+
+                // Show/hide based on content availability
+                const hasCombined = data.formats.some(f => f.type === 'Combined');
+                const hasVideoOnly = data.formats.some(f => f.type === 'Video Only');
+                const hasAudioOnly = data.formats.some(f => f.type === 'Audio Only');
+
+                mediaTypeSelect.innerHTML = '';
+                if (hasCombined) {
+                    const opt = document.createElement('option');
+                    opt.value = 'Combined';
+                    opt.textContent = 'Video + Audio';
+                    mediaTypeSelect.appendChild(opt);
+                }
+                if (hasVideoOnly) {
+                    const opt = document.createElement('option');
+                    opt.value = 'Video Only';
+                    opt.textContent = 'Video Only (Mute)';
+                    mediaTypeSelect.appendChild(opt);
+                }
+                if (hasAudioOnly) {
+                    const opt = document.createElement('option');
+                    opt.value = 'Audio Only';
+                    opt.textContent = 'Audio Only';
+                    mediaTypeSelect.appendChild(opt);
+                }
+
+                // Trigger population on type change
+                mediaTypeSelect.onchange = () => populateFormats(mediaTypeSelect.value);
+
+                function populateFormats(type) {
+                    formatSelect.innerHTML = '';
+                    const filteredFormats = data.formats.filter(f => f.type === type);
+
+                    filteredFormats.forEach((fmt) => {
+                        const option = document.createElement('option');
+                        // Use stringified JSON or an ID directly as value since we need to track original index
+                        const origIndex = data.formats.indexOf(fmt);
+                        option.value = origIndex;
+
+                        const displaySize = fmt.size !== 'N/A' ? ` (${fmt.size})` : '';
+
+                        option.textContent = `${fmt.ext.toUpperCase()} - ${fmt.resolution}${displaySize} - ${fmt.bitrate}`;
+                        formatSelect.appendChild(option);
+                    });
+
+                    if (filteredFormats.length > 0) {
+                        updateLinkUI(filteredFormats[0], data.title);
+                    }
+                }
+
+                // Initial populate
+                if (mediaTypeSelect.options.length > 0) {
+                    populateFormats(mediaTypeSelect.value);
+                }
+
+                // Add event listener to update link on change
+                formatSelect.onchange = (e) => {
+                    const selectedFmt = data.formats[e.target.value];
+                    updateLinkUI(selectedFmt, data.title);
+                };
+
+            } else if (data.download_url) {
+                // Fallback (rare) if API changes
+                const option = document.createElement('option');
+                option.textContent = 'Default Best Format';
+                formatSelect.appendChild(option);
+                updateLinkUI({ url: data.download_url, ext: 'mp4' }, data.title);
+            }
+
+            function updateLinkUI(fmt, title) {
+                // Generate proxy URL to enforce the download filename
+                const proxyUrl = `${API_BASE_URL}/api/proxy?url=${encodeURIComponent(fmt.url)}&title=${encodeURIComponent(title)}`;
+                downloadLink.href = proxyUrl;
+                downloadLink.setAttribute('download', `${title}.${fmt.ext}`);
+            }
 
             // Show result block
             resultContainer.classList.remove('hidden');
