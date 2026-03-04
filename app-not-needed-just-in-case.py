@@ -50,15 +50,17 @@ def get_video_link():
                 has_video = vcodec != 'none'
                 has_audio = acodec != 'none'
                 
+                # We need merged formats (video + audio), audio-only, OR video-only formats
                 if not has_video and not has_audio:
                     continue
                     
-                if has_video:
-                    main_category = "Video"
-                    mute_status = "With Audio" if has_audio else "Mute"
-                elif has_audio:
-                    main_category = "Audio"
-                    mute_status = "Audio Only"
+                # Mark as 'Combined', 'Video Only', or 'Audio Only' depending on streams
+                if has_video and has_audio:
+                    format_type = "Combined"
+                elif has_video and not has_audio:
+                    format_type = "Video Only"
+                elif not has_video and has_audio:
+                    format_type = "Audio Only"
                 else:
                     continue
                     
@@ -70,7 +72,7 @@ def get_video_link():
                 tbr = f.get('tbr')
                 bitrate = f"{int(tbr)}kbps" if tbr else "N/A"
 
-                combo = f"{display_ext}-{resolution}-{bitrate}-{mute_status}"
+                combo = f"{display_ext}-{resolution}-{bitrate}"
                 if combo in seen_combos:
                     continue
                 seen_combos.add(combo)
@@ -86,15 +88,14 @@ def get_video_link():
                 available_formats.append({
                     'ext': display_ext,
                     'resolution': resolution,
-                    'category': main_category,
-                    'mute_status': mute_status,
+                    'type': format_type,
                     'size': size_mb,
                     'bitrate': bitrate,
                     'url': fmt_url
                 })
             
             def sort_key(x):
-                type_score = 0 if x['category'] == 'Video' else 1
+                type_score = 0 if x['type'] == 'Video' else 1
                 res_str = x['resolution'].replace('p', '')
                 res_score = -int(res_str) if res_str.isdigit() else 0
                 return (type_score, res_score)
@@ -107,8 +108,7 @@ def get_video_link():
                     available_formats.append({
                         'ext': 'mp4',
                         'resolution': 'Default',
-                        'category': 'Video',
-                        'mute_status': 'With Audio',
+                        'type': 'Video',
                         'size': 'N/A',
                         'bitrate': 'N/A',
                         'url': best_url

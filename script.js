@@ -68,7 +68,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // GitHub Pages වගේ තැනක Host කරාම Localhost වැඩ කරන්නේ නෑ. 
         // ඒ නිසා ඔයාගේ Backend එක (app.py) Render.com වගේ cloud එකක deploy කරලා ලැබෙන URL එක මෙතන දාන්න.
-        const PRODUCTION_API_URL = 'https://ඔයාගේ-backend-url-එක.render.com';
+        const PRODUCTION_API_URL = 'https://downloades-production.up.railway.app';
 
         // ඔයා මේක තමන්ගේ පරිගණකයේ (Localhost) run කරනවා නම්, මේක ඇවිත් 'http://localhost:5000' වෙනවා.
         // GitHub එකේ ලයිව් තියෙනවා නම් උඩ තියෙන PRODUCTION_API_URL එක ගන්නවා.
@@ -151,46 +151,49 @@ document.addEventListener('DOMContentLoaded', () => {
             if (data.formats && data.formats.length > 0) {
 
                 // Show/hide based on content availability
-                const hasCombined = data.formats.some(f => f.type === 'Combined');
-                const hasVideoOnly = data.formats.some(f => f.type === 'Video Only');
-                const hasAudioOnly = data.formats.some(f => f.type === 'Audio Only');
+                const hasVideo = data.formats.some(f => f.category === 'Video');
+                const hasAudio = data.formats.some(f => f.category === 'Audio');
 
                 mediaTypeSelect.innerHTML = '';
-                if (hasCombined) {
+                if (hasVideo) {
                     const opt = document.createElement('option');
-                    opt.value = 'Combined';
-                    opt.textContent = 'Video + Audio';
+                    opt.value = 'Video';
+                    opt.textContent = 'Video';
                     mediaTypeSelect.appendChild(opt);
                 }
-                if (hasVideoOnly) {
+                if (hasAudio) {
                     const opt = document.createElement('option');
-                    opt.value = 'Video Only';
-                    opt.textContent = 'Video Only (Mute)';
-                    mediaTypeSelect.appendChild(opt);
-                }
-                if (hasAudioOnly) {
-                    const opt = document.createElement('option');
-                    opt.value = 'Audio Only';
-                    opt.textContent = 'Audio Only';
+                    opt.value = 'Audio';
+                    opt.textContent = 'Audio';
                     mediaTypeSelect.appendChild(opt);
                 }
 
-                // Trigger population on type change
+                // Trigger population on category change
                 mediaTypeSelect.onchange = () => populateFormats(mediaTypeSelect.value);
 
-                function populateFormats(type) {
+                function populateFormats(category) {
                     formatSelect.innerHTML = '';
-                    const filteredFormats = data.formats.filter(f => f.type === type);
+                    const filteredFormats = data.formats.filter(f => f.category === category);
 
                     filteredFormats.forEach((fmt) => {
                         const option = document.createElement('option');
-                        // Use stringified JSON or an ID directly as value since we need to track original index
+                        // Track original index
                         const origIndex = data.formats.indexOf(fmt);
                         option.value = origIndex;
 
-                        const displaySize = fmt.size !== 'N/A' ? ` (${fmt.size})` : '';
+                        const displaySize = fmt.size !== 'N/A' ? ` | ${fmt.size}` : '';
+                        const displayBitrate = fmt.bitrate !== 'N/A' ? ` | ${fmt.bitrate}` : '';
 
-                        option.textContent = `${fmt.ext.toUpperCase()} - ${fmt.resolution}${displaySize} - ${fmt.bitrate}`;
+                        // Example: "MP4 - 1080p - With Audio | 50.0 MB | 1500kbps"
+                        let label = `${fmt.ext.toUpperCase()}`;
+                        if (category === 'Video') {
+                            label += ` - ${fmt.resolution} - ${fmt.mute_status}`;
+                        } else {
+                            label += ` - ${fmt.mute_status}`;
+                        }
+                        label += `${displaySize}${displayBitrate}`;
+
+                        option.textContent = label;
                         formatSelect.appendChild(option);
                     });
 
