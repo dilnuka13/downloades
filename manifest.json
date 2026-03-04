@@ -1,0 +1,21 @@
+{
+  "name": "DE Downloads",
+  "short_name": "DE Downloads",
+  "description": "Fastest tool to download your favorite videos from YouTube, TikTok, and Facebook.",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#0d1b2a",
+  "theme_color": "#2cd4d9",
+  "icons": [
+    {
+      "src": "logo.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "logo.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

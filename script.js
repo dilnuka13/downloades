@@ -66,14 +66,8 @@ document.addEventListener('DOMContentLoaded', () => {
         resultContainer.classList.add('hidden');
         setLoadingState(true);
 
-        // GitHub Pages වගේ තැනක Host කරාම Localhost වැඩ කරන්නේ නෑ. 
-        // ඒ නිසා ඔයාගේ Backend එක (app.py) Render.com වගේ cloud එකක deploy කරලා ලැබෙන URL එක මෙතන දාන්න.
-        const PRODUCTION_API_URL = 'https://downloades-production.up.railway.app';
-
-        // ඔයා මේක තමන්ගේ පරිගණකයේ (Localhost) run කරනවා නම්, මේක ඇවිත් 'http://localhost:5000' වෙනවා.
-        // GitHub එකේ ලයිව් තියෙනවා නම් උඩ තියෙන PRODUCTION_API_URL එක ගන්නවා.
-        const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.protocol === 'file:';
-        const API_BASE_URL = isLocalhost ? 'http://localhost:5000' : PRODUCTION_API_URL;
+        // අපි දැන් සම්පූර්ණ අඩවියම එකම තැනක (Railway) Run කරන නිසා කෙළින්ම එතනම API එක ගන්නවා.
+        const API_BASE_URL = window.location.origin;
 
         try {
             const response = await fetch(`${API_BASE_URL}/api/download`, {
